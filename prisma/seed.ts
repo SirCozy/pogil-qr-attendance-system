@@ -4,16 +4,16 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 const STUDENTS = [
-  { name: "ADEBAYO MUSTAPHA", matricNo: "CSC/ND2/24/001" },
-  { name: "OKONKWO BLESSING CHIOMA", matricNo: "CSC/ND2/24/002" },
-  { name: "YUSUF IBRAHIM ABUBAKAR", matricNo: "CSC/ND2/24/003" },
-  { name: "ABUBAKAR FATIMA ZAHRA", matricNo: "CSC/ND2/24/004" },
-  { name: "OBI CHUKWUEMEKA DANIEL", matricNo: "CSC/ND2/24/005" },
-  { name: "MOHAMMED AISHA BELLO", matricNo: "CSC/ND2/24/006" },
-  { name: "ADEWALE OLUWASEUN PETER", matricNo: "CSC/ND2/24/007" },
-  { name: "NWOSU GRACE ADAOBI", matricNo: "CSC/ND2/24/008" },
-  { name: "HASSAN AMINAT FOLAKE", matricNo: "CSC/ND2/24/009" },
-  { name: "OKAFOR KENNETH EMEKA", matricNo: "CSC/ND2/24/010" },
+  { name: "Student One", matricNo: "CSC/ND2/24/001" },
+  { name: "Student Two", matricNo: "CSC/ND2/24/002" },
+  { name: "Student Three", matricNo: "CSC/ND2/24/003" },
+  { name: "Student Four", matricNo: "CSC/ND2/24/004" },
+  { name: "Student Five", matricNo: "CSC/ND2/24/005" },
+  { name: "Student Six", matricNo: "CSC/ND2/24/006" },
+  { name: "Student Seven", matricNo: "CSC/ND2/24/007" },
+  { name: "Student Eight", matricNo: "CSC/ND2/24/008" },
+  { name: "Student Nine", matricNo: "CSC/ND2/24/009" },
+  { name: "Student Ten", matricNo: "CSC/ND2/24/010" },
 ];
 
 const COURSES = [
@@ -71,6 +71,7 @@ async function main() {
     await prisma.user.upsert({
       where: { matricNo: s.matricNo },
       update: {
+        name: s.name,
         securityQuestion: DEFAULT_SECURITY_QUESTION,
         securityAnswer: defaultAnswerHash,
       },
