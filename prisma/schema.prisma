@@ -16,6 +16,7 @@ model User {
   role             String
   securityQuestion String?
   securityAnswer   String?
+  createdAt        DateTime?
   sessions         Session[]
   attendances      Attendance[]
   createdCodes     RegistrationCode[] @relation("AdminCodes")
