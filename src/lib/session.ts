@@ -9,11 +9,13 @@ export interface SessionData {
 }
 
 export const sessionOptions = {
-  password: process.env.SESSION_SECRET as string,
+  password: process.env.SESSION_SECRET || "development-secret-development-secret-1234",
   cookieName: "qr_attendance_session",
   cookieOptions: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
   },
 };
 
