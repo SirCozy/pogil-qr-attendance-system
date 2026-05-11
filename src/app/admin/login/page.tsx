@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/qrapi/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: "admin", identifier: email, password }),
@@ -29,8 +29,7 @@ export default function AdminLoginPage() {
         setError(data.error || "Login failed");
         return;
       }
-      router.replace("/admin/dashboard");
-      router.refresh();
+      window.location.href = "/admin/dashboard";
     } catch (error) {
       setError(error instanceof DOMException && error.name === "AbortError" ? "Login timed out. Please try again." : "Login failed");
     } finally {
