@@ -30,7 +30,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const res = await fetch("/api/auth/forgot-password", {
+    const res = await fetch("/qrapi/auth/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ step: "question", role, identifier }),
@@ -48,7 +48,7 @@ export default function ForgotPasswordPage() {
     if (newPassword.length < 6) { setError("Password must be at least 6 characters"); return; }
     setLoading(true);
     setError("");
-    const res = await fetch("/api/auth/forgot-password", {
+    const res = await fetch("/qrapi/auth/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ step: "reset", role, identifier, answer, newPassword }),
