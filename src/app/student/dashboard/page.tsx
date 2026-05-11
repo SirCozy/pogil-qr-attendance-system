@@ -29,13 +29,13 @@ export default function StudentDashboard() {
   const [scanned, setScanned] = useState(false);
 
   const fetchAttendances = useCallback(async () => {
-    const res = await fetch("/api/attendance");
+    const res = await fetch("/qrapi/attendance");
     if (res.ok) setAttendances(await res.json());
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/qrapi/auth/me")
       .then((r) => r.json())
       .then((data) => {
         if (data.error) { router.push("/login"); return; }
@@ -52,7 +52,7 @@ export default function StudentDashboard() {
       setScanning(false);
       setMessage({ type: "info", text: "Marking attendance..." });
 
-      const res = await fetch("/api/attendance", {
+      const res = await fetch("/qrapi/attendance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ qrCode }),
@@ -79,7 +79,7 @@ export default function StudentDashboard() {
   };
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch("/qrapi/auth/logout", { method: "POST" });
     router.push("/login");
   };
 
