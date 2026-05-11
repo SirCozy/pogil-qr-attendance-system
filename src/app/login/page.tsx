@@ -27,22 +27,28 @@ function LoginForm() {
     setError("");
     setSuccess("");
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ role, identifier, password }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) {
-      setError(data.error || "Login failed");
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 15000);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role, identifier, password }),
+        signal: controller.signal,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || "Login failed");
+        return;
+      }
+      router.replace(data.role === "student" ? "/student/dashboard" : data.role === "lecturer" ? "/lecturer/dashboard" : "/admin/dashboard");
+      router.refresh();
+    } catch (error) {
+      setError(error instanceof DOMException && error.name === "AbortError" ? "Login timed out. Please try again." : "Login failed");
+    } finally {
+      window.clearTimeout(timeout);
       setLoading(false);
-      return;
     }
-
-    if (data.role === "student") router.push("/student/dashboard");
-    else if (data.role === "lecturer") router.push("/lecturer/dashboard");
-    else router.push("/admin/dashboard");
   };
 
   return (
@@ -107,17 +113,6 @@ function LoginForm() {
         <Link href="/register" className="text-blue-700 font-medium hover:underline">Register here</Link>
       </p>
 
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-        <p className="text-xs font-semibold text-blue-800 mb-2">Demo Credentials</p>
-        <div className="space-y-1">
-          <p className="text-xs text-blue-700">
-            <span className="font-medium">Student:</span> CSC/ND2/24/001 / student123
-          </p>
-          <p className="text-xs text-blue-700">
-            <span className="font-medium">Lecturer:</span> akinboro.deborah@pogil.edu.ng / lecturer123
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
