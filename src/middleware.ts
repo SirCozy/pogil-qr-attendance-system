@@ -7,9 +7,9 @@ const PUBLIC_PATHS = [
   "/admin/login",
   "/register",
   "/forgot-password",
-  "/api/auth/login",
-  "/api/auth/register",
-  "/api/auth/forgot-password",
+  "/qrapi/auth/login",
+  "/qrapi/auth/register",
+  "/qrapi/auth/forgot-password",
 ];
 
 export async function middleware(request: NextRequest) {
@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!session.isLoggedIn) {
-    if (pathname.startsWith("/api/")) {
+    if (pathname.startsWith("/qrapi/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     return NextResponse.redirect(new URL("/login", request.url));
@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin") && session.role !== "admin") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  if (pathname.startsWith("/api/admin") && session.role !== "admin") {
+  if (pathname.startsWith("/qrapi/admin") && session.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (pathname.startsWith("/lecturer") && session.role !== "lecturer") {
