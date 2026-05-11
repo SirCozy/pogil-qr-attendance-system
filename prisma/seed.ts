@@ -36,7 +36,7 @@ async function main() {
   const adminPw = await bcrypt.hash("admin123", 10);
   const admin = await prisma.user.upsert({
     where: { email: "admin@pogil.edu.ng" },
-    update: {},
+    update: { password: adminPw, securityQuestion: DEFAULT_SECURITY_QUESTION, securityAnswer: defaultAnswerHash },
     create: {
       name: "System Administrator",
       email: "admin@pogil.edu.ng",
@@ -52,6 +52,7 @@ async function main() {
   const lecturer = await prisma.user.upsert({
     where: { email: "akinboro.deborah@pogil.edu.ng" },
     update: {
+      password: lecturerPw,
       securityQuestion: DEFAULT_SECURITY_QUESTION,
       securityAnswer: defaultAnswerHash,
     },
@@ -72,6 +73,7 @@ async function main() {
       where: { matricNo: s.matricNo },
       update: {
         name: s.name,
+        password: studentPw,
         securityQuestion: DEFAULT_SECURITY_QUESTION,
         securityAnswer: defaultAnswerHash,
       },
