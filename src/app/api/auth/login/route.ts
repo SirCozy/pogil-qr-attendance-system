@@ -6,6 +6,10 @@ import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.SESSION_SECRET && process.env.NODE_ENV === "production") {
+      return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    }
+
     const { role, identifier, password } = await request.json();
 
     if (!role || !identifier || !password) {
