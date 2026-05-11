@@ -43,7 +43,7 @@ export default function LecturerDashboard() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchSessions = useCallback(async () => {
-    const res = await fetch("/api/sessions");
+    const res = await fetch("/qrapi/sessions");
     if (res.ok) {
       const data = await res.json();
       setSessions(data);
@@ -52,7 +52,7 @@ export default function LecturerDashboard() {
   }, []);
 
   const fetchAttendance = useCallback(async (sessionId: number) => {
-    const res = await fetch(`/api/attendance/${sessionId}`);
+    const res = await fetch(`/qrapi/attendance/${sessionId}`);
     if (res.ok) {
       const data = await res.json();
       setAttendance(data);
@@ -65,7 +65,7 @@ export default function LecturerDashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/qrapi/auth/me")
       .then((r) => r.json())
       .then((data) => {
         if (data.error) { router.push("/login"); return; }
@@ -88,7 +88,7 @@ export default function LecturerDashboard() {
     const selectedCourse = useCustom ? customCourse.trim() : course;
     if (!selectedCourse) return;
     setCreating(true);
-    const res = await fetch("/api/sessions", {
+    const res = await fetch("/qrapi/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ course: selectedCourse }),
@@ -110,7 +110,7 @@ export default function LecturerDashboard() {
   const exportExcel = async () => {
     if (!activeSession) return;
     setExporting(true);
-    const res = await fetch(`/api/sessions/${activeSession.id}/export`);
+    const res = await fetch(`/qrapi/sessions/${activeSession.id}/export`);
     if (res.ok) {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -126,7 +126,7 @@ export default function LecturerDashboard() {
   };
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch("/qrapi/auth/logout", { method: "POST" });
     router.push("/login");
   };
 
