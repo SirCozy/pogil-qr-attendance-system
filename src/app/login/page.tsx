@@ -30,7 +30,7 @@ function LoginForm() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/qrapi/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role, identifier, password }),
@@ -41,8 +41,8 @@ function LoginForm() {
         setError(data.error || "Login failed");
         return;
       }
-      router.replace(data.role === "student" ? "/student/dashboard" : data.role === "lecturer" ? "/lecturer/dashboard" : "/admin/dashboard");
-      router.refresh();
+      const dest = data.role === "student" ? "/student/dashboard" : data.role === "lecturer" ? "/lecturer/dashboard" : "/admin/dashboard";
+      window.location.href = dest;
     } catch (error) {
       setError(error instanceof DOMException && error.name === "AbortError" ? "Login timed out. Please try again." : "Login failed");
     } finally {
