@@ -48,7 +48,7 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch("/qrapi/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
