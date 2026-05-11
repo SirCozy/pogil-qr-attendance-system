@@ -37,13 +37,13 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   const fetchCodes = useCallback(async () => {
-    const res = await fetch("/api/admin/codes");
+    const res = await fetch("/qrapi/admin/codes");
     if (res.ok) setCodes(await res.json());
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    fetch("/qrapi/auth/me")
       .then((r) => r.json())
       .then((data) => {
         if (data.error) {
@@ -59,7 +59,7 @@ export default function AdminDashboard() {
   const generateCode = async () => {
     setGenerating(true);
     setNewCode(null);
-    const res = await fetch("/api/admin/codes", {
+    const res = await fetch("/qrapi/admin/codes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ expiryHours }),
@@ -73,7 +73,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch("/qrapi/auth/logout", { method: "POST" });
     router.push("/admin/login");
   };
 
