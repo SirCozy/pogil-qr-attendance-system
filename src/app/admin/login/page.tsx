@@ -41,9 +41,13 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
       <div className="bg-gray-800 rounded-2xl border border-gray-700 p-8 w-full max-w-sm">
-        <div className="mb-6">
-          <p className="text-xs text-gray-500 uppercase tracking-widest">System Access</p>
-          <h1 className="text-xl font-semibold text-white mt-1">Administration</h1>
+        <div className="mb-6 flex items-center gap-3">
+          <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border-2 border-gray-600" />
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-widest">System Access</p>
+            <h1 className="text-xl font-semibold text-white mt-1">Administration</h1>
+            <p className="text-xs text-gray-500 mt-0.5">POGIL College of Health Technology</p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
