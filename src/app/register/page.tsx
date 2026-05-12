@@ -74,14 +74,17 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <header className="bg-blue-700 text-white py-4 px-6 shadow-md">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-medium uppercase tracking-widest text-blue-200">
-            POGIL College of Health Technology
-          </p>
-          <h1 className="text-lg font-bold mt-0.5">
-            Computer Science Department — Student Attendance System
-          </h1>
-          <p className="text-xs text-blue-200 mt-0.5">ND II · 2024/2025 Academic Session</p>
+        <div className="max-w-4xl mx-auto flex items-center gap-3">
+          <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover flex-shrink-0 border-2 border-blue-400" />
+          <div>
+            <p className="text-xs font-medium uppercase tracking-widest text-blue-200">
+              POGIL College of Health Technology
+            </p>
+            <h1 className="text-lg font-bold mt-0.5">
+              Computer Science Department — Student Attendance System
+            </h1>
+            <p className="text-xs text-blue-200 mt-0.5">ND II · 2024/2025 Academic Session</p>
+          </div>
         </div>
       </header>
 
