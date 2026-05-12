@@ -160,14 +160,17 @@ export default function LecturerDashboard() {
         <header className="bg-blue-700 text-white shadow-md">
           <div className="max-w-5xl mx-auto px-4 py-3">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-blue-200 uppercase tracking-widest font-medium">
-                  POGIL College of Health Technology
-                </p>
-                <h1 className="text-base font-bold mt-0.5">
-                  Computer Science Dept. — Lecturer Dashboard
-                  {user ? ` · ${user.name}` : ""}
-                </h1>
+              <div className="flex items-center gap-3">
+                <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-blue-400" />
+                <div>
+                  <p className="text-xs text-blue-200 uppercase tracking-widest font-medium">
+                    POGIL College of Health Technology
+                  </p>
+                  <h1 className="text-base font-bold mt-0.5">
+                    Computer Science Dept. — Lecturer Dashboard
+                    {user ? ` · ${user.name}` : ""}
+                  </h1>
+                </div>
               </div>
               <button onClick={handleLogout}
                 className="text-xs text-blue-200 hover:text-white border border-blue-500 rounded-lg px-3 py-1.5 transition-colors">
