@@ -83,7 +83,7 @@ export default function RegisterPage() {
             <h1 className="text-lg font-bold mt-0.5">
               Computer Science Department — Student Attendance System
             </h1>
-            <p className="text-xs text-blue-200 mt-0.5">ND II · 2024/2025 Academic Session</p>
+            <p className="text-xs text-blue-200 mt-0.5">ND II · 2025/2026 Academic Session</p>
           </div>
         </div>
       </header>
