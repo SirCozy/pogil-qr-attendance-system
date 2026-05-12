@@ -175,11 +175,14 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-950 text-white">
       <header className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-gray-500 uppercase tracking-widest">System Administration</p>
-            <h1 className="text-base font-semibold text-white mt-0.5">
-              POGIL Attendance — Admin Panel
-            </h1>
+          <div className="flex items-center gap-3">
+            <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-gray-600" />
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-widest">System Administration</p>
+              <h1 className="text-base font-semibold text-white mt-0.5">
+                POGIL Attendance — Admin Panel
+              </h1>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             {user && <span className="text-xs text-gray-400">{user.name}</span>}
