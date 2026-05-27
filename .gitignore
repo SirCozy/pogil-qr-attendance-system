@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# next build
+.next/
+out/
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# database
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# logs
+*.log
+
+# build output
+dist/
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

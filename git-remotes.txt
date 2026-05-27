@@ -1,0 +1,2 @@
+origin	https://github.com/SirCozy/pogil-qr-attendance-system.git (fetch)
+origin	https://github.com/SirCozy/pogil-qr-attendance-system.git (push)

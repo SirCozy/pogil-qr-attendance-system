@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import dynamic from "next/dynamic";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-const QRScanner = dynamic(() => import("@/components/QRScanner"), { ssr: false });
+import StudentNav from "@/components/StudentNav";
 
 interface User {
   id: number;
@@ -23,228 +22,135 @@ export default function StudentDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [attendances, setAttendances] = useState<AttendanceRecord[]>([]);
-  const [scanning, setScanning] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error" | "info"; text: string } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [scanned, setScanned] = useState(false);
-
-  const fetchAttendances = useCallback(async () => {
-    const res = await fetch("/qrapi/attendance");
-    if (res.ok) setAttendances(await res.json());
-    setLoading(false);
-  }, []);
 
   useEffect(() => {
     fetch("/qrapi/auth/me")
       .then((r) => r.json())
       .then((data) => {
-        if (data.error) { router.push("/login"); return; }
+        if (data.error) {
+          router.push("/login");
+          return;
+        }
         setUser(data);
-        fetchAttendances();
+        return fetch("/qrapi/attendance");
+      })
+      .then((res) => res?.json())
+      .then((data) => {
+        if (data) setAttendances(data);
+        setLoading(false);
       })
       .catch(() => router.push("/login"));
-  }, [router, fetchAttendances]);
-
-  const handleScan = useCallback(
-    async (qrCode: string) => {
-      if (scanned) return;
-      setScanned(true);
-      setScanning(false);
-      setMessage({ type: "info", text: "Marking attendance..." });
-
-      const res = await fetch("/qrapi/attendance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ qrCode }),
-      });
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessage({ type: "success", text: `Attendance marked for ${data.course}!` });
-        fetchAttendances();
-      } else if (res.status === 409) {
-        setMessage({ type: "info", text: "Attendance already recorded for this session." });
-      } else {
-        setMessage({ type: "error", text: data.error || "Failed to mark attendance. Please try again." });
-        setScanned(false);
-      }
-    },
-    [scanned, fetchAttendances]
-  );
-
-  const startScan = () => {
-    setScanning(true);
-    setMessage(null);
-    setScanned(false);
-  };
-
-  const handleLogout = async () => {
-    await fetch("/qrapi/auth/logout", { method: "POST" });
-    router.push("/login");
-  };
+  }, [router]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-400 text-sm">Loading...</p>
-      </div>
+      <>
+        <StudentNav />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <p className="text-gray-400 text-sm">Loading...</p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-blue-700 text-white shadow-md">
-        <div className="max-w-3xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-blue-400" />
-              <div>
-                <p className="text-xs text-blue-200 uppercase tracking-widest font-medium">
-                  POGIL College of Health Technology
-                </p>
-                <h1 className="text-base font-bold mt-0.5">
-                  Computer Science Dept. — Attendance System
-                </h1>
-              </div>
-            </div>
-            <button onClick={handleLogout}
-              className="text-xs text-blue-200 hover:text-white border border-blue-500 rounded-lg px-3 py-1.5 transition-colors">
-              Sign out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-4">
-        {/* Profile card */}
-        {user && (
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
-              Student Profile
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">Full Name</p>
-                <p className="text-sm font-semibold text-gray-900">{user.name}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">Matric Number</p>
-                <p className="text-sm font-semibold text-gray-900 font-mono">{user.matricNo}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">Department</p>
-                <p className="text-sm font-semibold text-gray-900">Computer Science</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">Level</p>
-                <p className="text-sm font-semibold text-gray-900">ND II</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">Session</p>
-                <p className="text-sm font-semibold text-gray-900">2024/2025</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 mb-0.5">Total Attendance</p>
-                <p className="text-sm font-bold text-blue-700">{attendances.length} sessions</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Scanner card */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                Mark Attendance
+    <>
+      <StudentNav />
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+          {/* Welcome Section */}
+          {user && (
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl p-8 sm:p-10 shadow-lg">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3">Welcome back, {user.name}!</h2>
+              <p className="text-blue-100 text-lg">
+                You have marked attendance for{" "}
+                <span className="font-bold text-blue-50 text-2xl block sm:inline">
+                  {attendances.length} session{attendances.length !== 1 ? "s" : ""}
+                </span>
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">Scan the QR code displayed by your lecturer</p>
-            </div>
-            {!scanning && (
-              <button onClick={startScan}
-                className="text-sm px-4 py-2 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors">
-                Scan QR Code
-              </button>
-            )}
-          </div>
-
-          {message && (
-            <div className={`mb-4 px-3 py-3 rounded-lg text-sm border flex items-start gap-2 ${
-              message.type === "success"
-                ? "bg-green-50 text-green-700 border-green-200"
-                : message.type === "info"
-                ? "bg-blue-50 text-blue-700 border-blue-200"
-                : "bg-red-50 text-red-700 border-red-200"
-            }`}>
-              <span className="mt-0.5">
-                {message.type === "success" ? "✓" : message.type === "info" ? "ℹ" : "✕"}
-              </span>
-              <span>{message.text}</span>
             </div>
           )}
 
-          {scanning ? (
-            <div>
-              <QRScanner onScan={handleScan} onClose={() => setScanning(false)} />
-            </div>
-          ) : (
-            !message && (
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center">
-                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" />
+          {/* Quick Action Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Mark Attendance Card */}
+            <Link href="/student/attendance">
+              <div className="bg-white rounded-2xl border-2 border-gray-100 p-7 hover:shadow-xl hover:border-blue-300 transition-all duration-300 cursor-pointer h-full group">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <p className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Quick Action</p>
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">Mark Attendance</h3>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 ml-3 group-hover:from-blue-200 group-hover:to-blue-100 transition-all">
+                    <svg className="w-7 h-7 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-6 leading-relaxed">Scan a QR code to mark your attendance</p>
+                <div className="flex items-center text-blue-700 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                  <span>Start scanning</span>
+                  <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-400">Press Scan QR Code to open your camera</p>
               </div>
-            )
-          )}
+            </Link>
 
-          {message && (message.type === "error") && (
-            <button onClick={startScan} className="mt-3 w-full py-2 text-sm text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors font-medium">
-              Try Again
-            </button>
-          )}
-        </div>
+            {/* History Card */}
+            <Link href="/student/history">
+              <div className="bg-white rounded-2xl border-2 border-gray-100 p-7 hover:shadow-xl hover:border-green-300 transition-all duration-300 cursor-pointer h-full group">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <p className="text-xs font-bold text-green-600 uppercase tracking-wider mb-2">Records</p>
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-700 transition-colors">Attendance History</h3>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 ml-3 group-hover:from-green-200 group-hover:to-green-100 transition-all">
+                    <svg className="w-7 h-7 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-6 leading-relaxed">View all {attendances.length} attendance record{attendances.length !== 1 ? "s" : ""}</p>
+                <div className="flex items-center text-green-700 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                  <span>View records</span>
+                  <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+          </div>
 
-        {/* Attendance history */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">
-            Attendance History ({attendances.length})
-          </p>
-          {attendances.length === 0 ? (
-            <p className="text-sm text-gray-400 py-2">No attendance records yet. Scan a QR code to mark your first attendance.</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left pb-2 text-xs font-medium text-gray-400">#</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-400">Course</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-400">Date</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-400">Time</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {attendances.map((a, i) => (
-                    <tr key={a.id}>
-                      <td className="py-2.5 text-gray-400 text-xs">{i + 1}</td>
-                      <td className="py-2.5 font-medium text-gray-900">{a.session.course}</td>
-                      <td className="py-2.5 text-gray-600">
-                        {new Date(a.timestamp).toLocaleDateString()}
-                      </td>
-                      <td className="py-2.5 text-gray-600">
-                        {new Date(a.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* Profile Card */}
+          <Link href="/student/profile">
+            <div className="bg-white rounded-2xl border-2 border-gray-100 p-7 hover:shadow-xl hover:border-purple-300 transition-all duration-300 cursor-pointer group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <p className="text-xs font-bold text-purple-600 uppercase tracking-wider mb-2">Account</p>
+                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-purple-700 transition-colors">Student Profile</h3>
+                </div>
+                <div className="bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 ml-3 group-hover:from-purple-200 group-hover:to-purple-100 transition-all">
+                  <svg className="w-7 h-7 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6 leading-relaxed">View your profile information and attendance summary</p>
+              <div className="flex items-center text-purple-700 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                <span>View profile</span>
+                <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </div>
-          )}
+          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }
