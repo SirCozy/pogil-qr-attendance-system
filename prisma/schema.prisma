@@ -14,6 +14,7 @@ model User {
   email            String?            @unique
   password         String
   role             String
+  academicSession  String?            // e.g., "2024/2025"
   securityQuestion String?
   securityAnswer   String?
   createdAt        DateTime?

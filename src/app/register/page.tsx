@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { formatAcademicSession, getAcademicSession } from "@/lib/academicSession";
 
 const SECURITY_QUESTIONS = [
   "What is your mother's maiden name?",
@@ -14,6 +15,7 @@ const SECURITY_QUESTIONS = [
 
 export default function RegisterPage() {
   const router = useRouter();
+  const academicSession = formatAcademicSession(getAcademicSession());
   const [form, setForm] = useState({
     name: "",
     matricNo: "",
@@ -83,7 +85,7 @@ export default function RegisterPage() {
             <h1 className="text-lg font-bold mt-0.5">
               Computer Science Department — Student Attendance System
             </h1>
-            <p className="text-xs text-blue-200 mt-0.5">ND II · 2025/2026 Academic Session</p>
+            <p className="text-xs text-blue-200 mt-0.5">ND II · {academicSession} Academic Session</p>
           </div>
         </div>
       </header>

@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import StudentNav from "@/components/StudentNav";
+import { formatAcademicSession, getAcademicSession } from "@/lib/academicSession";
 
 interface User {
   id: number;
   name: string;
   matricNo: string;
   role: string;
+  academicSession: string | null;
 }
 
 interface AttendanceRecord {
@@ -53,6 +55,10 @@ export default function ProfilePage() {
     );
   }
 
+  // Use stored academic session or generate dynamically for existing students
+  const academicSession = user?.academicSession || getAcademicSession();
+  const formattedSession = formatAcademicSession(academicSession);
+
   return (
     <>
       <StudentNav />
@@ -95,7 +101,7 @@ export default function ProfilePage() {
                   </div>
                   <div className="pb-6 border-b-2 border-gray-100 sm:border-b-0 lg:pb-0 lg:border-b-2">
                     <p className="text-gray-600 font-medium mb-2">Academic Session</p>
-                    <p className="text-lg font-bold text-gray-900">2024/2025</p>
+                    <p className="text-lg font-bold text-gray-900">{formattedSession}</p>
                   </div>
                   <div className="pb-6 border-b-2 border-gray-100 sm:pb-0 sm:border-b-0 lg:pb-0 lg:border-b-2">
                     <p className="text-gray-600 font-medium mb-2">Total Attendance</p>

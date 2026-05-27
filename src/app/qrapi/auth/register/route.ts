@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAcademicSession } from "@/lib/academicSession";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
         matricNo: matricNo.trim().toUpperCase(),
         password: hashedPassword,
         role: "student",
+        academicSession: getAcademicSession(),
         securityQuestion: securityQuestion.trim(),
         securityAnswer: hashedAnswer,
       },
