@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { formatAcademicSession, getAcademicSession } from "@/lib/academicSession";
 
 type Step = "identify" | "question" | "reset" | "done";
 
@@ -71,7 +72,7 @@ export default function ForgotPasswordPage() {
             <h1 className="text-lg font-bold mt-0.5">
               Computer Science Department — Student Attendance System
             </h1>
-            <p className="text-xs text-blue-200 mt-0.5">ND II · 2025/2026 Academic Session</p>
+            <p className="text-xs text-blue-200 mt-0.5">ND II · {formatAcademicSession(getAcademicSession())} Academic Session</p>
           </div>
         </div>
       </header>

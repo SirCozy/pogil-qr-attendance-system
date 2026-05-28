@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { formatAcademicSession } from "@/lib/academicSession";
 
 interface Code {
   id: number;
@@ -16,6 +17,7 @@ interface Student {
   id: number;
   name: string;
   matricNo: string | null;
+  academicSession: string | null;
   createdAt: string | null;
 }
 
@@ -52,6 +54,11 @@ function codeStatus(code: Code): { label: string; color: string } {
 function fmtDate(v: string | null) {
   if (!v) return "—";
   return new Date(v).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function fmtDateTime(v: string | null) {
+  if (!v) return "—";
+  return new Date(v).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 const BLANK_FORM = { name: "", email: "", password: "", securityQuestion: SECURITY_QUESTIONS[0], securityAnswer: "" };
@@ -278,7 +285,7 @@ export default function AdminDashboard() {
                         <tr key={c.id}>
                           <td className="py-2.5 font-mono font-semibold text-white">{c.code}</td>
                           <td className="py-2.5 text-gray-400 text-xs">
-                            {new Date(c.expiresAt).toLocaleString()}
+                            {fmtDateTime(c.expiresAt)}
                           </td>
                           <td className="py-2.5">
                             <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${status.color}`}>
@@ -455,6 +462,7 @@ export default function AdminDashboard() {
                   <tr className="border-b border-gray-800">
                     <th className="text-left pb-2 text-xs font-medium text-gray-500">Name</th>
                     <th className="text-left pb-2 text-xs font-medium text-gray-500">Matric Number</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-500">Academic Session</th>
                     <th className="text-left pb-2 text-xs font-medium text-gray-500">Date Created</th>
                     <th className="text-left pb-2 text-xs font-medium text-gray-500"></th>
                   </tr>
@@ -464,6 +472,9 @@ export default function AdminDashboard() {
                     <tr key={s.id}>
                       <td className="py-2.5 text-white text-sm">{s.name}</td>
                       <td className="py-2.5 font-mono text-gray-400 text-xs">{s.matricNo ?? "—"}</td>
+                      <td className="py-2.5 text-gray-400 text-xs">
+                        {s.academicSession ? formatAcademicSession(s.academicSession) : "—"}
+                      </td>
                       <td className="py-2.5 text-gray-400 text-xs">{fmtDate(s.createdAt)}</td>
                       <td className="py-2.5">
                         <button
