@@ -39,44 +39,44 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-      <div className="bg-gray-800 rounded-2xl border border-gray-700 p-8 w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 px-4">
+      <div className="bg-white rounded-2xl border border-gray-200 p-8 w-full max-w-sm shadow-lg">
         <div className="mb-6 flex items-center gap-3">
-          <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border-2 border-gray-600" />
+          <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border-2 border-gray-200" />
           <div>
-            <p className="text-xs text-gray-500 uppercase tracking-widest">System Access</p>
-            <h1 className="text-xl font-semibold text-white mt-1">Administration</h1>
-            <p className="text-xs text-gray-500 mt-0.5">POGIL College of Health Technology</p>
+            <p className="text-xs text-gray-600 uppercase tracking-widest">System Access</p>
+            <h1 className="text-xl font-semibold text-gray-900 mt-1">Administration</h1>
+            <p className="text-xs text-gray-600 mt-0.5">POGIL College of Health Technology</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">Email</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1.5">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@pogil.edu.ng"
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">Password</label>
+            <label className="block text-xs font-medium text-gray-700 mb-1.5">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-400 bg-red-900/30 border border-red-800 rounded-lg px-3 py-2">
+            <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               {error}
             </p>
           )}

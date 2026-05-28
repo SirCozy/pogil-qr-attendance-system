@@ -179,23 +179,23 @@ export default function AdminDashboard() {
   const used = codes.filter((c) => c.usedAt).length;
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <header className="bg-gray-900 border-b border-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      <header className="bg-gradient-to-r from-blue-700 to-blue-800 text-white border-b border-blue-900">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-gray-600" />
+            <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-white" />
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-widest">System Administration</p>
+              <p className="text-xs text-blue-100 uppercase tracking-widest">System Administration</p>
               <h1 className="text-base font-semibold text-white mt-0.5">
                 POGIL Attendance — Admin Panel
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {user && <span className="text-xs text-gray-400">{user.name}</span>}
+            {user && <span className="text-xs text-blue-100">{user.name}</span>}
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-400 hover:text-white border border-gray-700 rounded-lg px-3 py-1.5 transition-colors"
+              className="text-xs text-blue-100 hover:bg-blue-600 border border-blue-600 rounded-lg px-3 py-1.5 transition-colors"
             >
               Sign out
             </button>
@@ -207,12 +207,12 @@ export default function AdminDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: "Active Codes", value: active, color: "text-green-400" },
-            { label: "Expired", value: expired, color: "text-red-400" },
-            { label: "Used", value: used, color: "text-gray-400" },
+            { label: "Active Codes", value: active, color: "text-green-600" },
+            { label: "Expired", value: expired, color: "text-red-600" },
+            { label: "Used", value: used, color: "text-gray-600" },
           ].map((stat) => (
-            <div key={stat.label} className="bg-gray-900 rounded-xl border border-gray-800 p-4">
-              <p className="text-xs text-gray-500 mb-1">{stat.label}</p>
+            <div key={stat.label} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-xs text-gray-600 mb-1">{stat.label}</p>
               <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
             </div>
           ))}
@@ -220,10 +220,10 @@ export default function AdminDashboard() {
 
         {/* Registration Codes */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
-            <h2 className="text-sm font-semibold text-gray-300 mb-4">Generate Registration Code</h2>
+          <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+            <h2 className="text-sm font-semibold text-gray-900 mb-4">Generate Registration Code</h2>
             <div className="mb-4">
-              <label className="block text-xs text-gray-500 mb-2">Code Expiry</label>
+              <label className="block text-xs text-gray-600 mb-2">Code Expiry</label>
               <div className="space-y-1.5">
                 {EXPIRY_OPTIONS.map((opt) => (
                   <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
@@ -233,9 +233,9 @@ export default function AdminDashboard() {
                       value={opt.value}
                       checked={expiryHours === opt.value}
                       onChange={() => setExpiryHours(opt.value)}
-                      className="accent-blue-500"
+                      className="accent-blue-600"
                     />
-                    <span className="text-sm text-gray-300">{opt.label}</span>
+                    <span className="text-sm text-gray-700">{opt.label}</span>
                   </label>
                 ))}
               </div>
@@ -248,18 +248,18 @@ export default function AdminDashboard() {
               {generating ? "Generating..." : "Generate Code"}
             </button>
             {newCode && (
-              <div className="mt-4 p-4 bg-blue-900/40 border border-blue-700 rounded-xl text-center">
-                <p className="text-xs text-blue-300 mb-1">New Registration Code</p>
-                <p className="text-2xl font-mono font-bold text-white tracking-widest">{newCode}</p>
-                <p className="text-xs text-blue-400 mt-2">Share this with the student to register</p>
+              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-center">
+                <p className="text-xs text-blue-700 mb-1">New Registration Code</p>
+                <p className="text-2xl font-mono font-bold text-blue-900 tracking-widest">{newCode}</p>
+                <p className="text-xs text-blue-600 mt-2">Share this with the student to register</p>
               </div>
             )}
           </div>
 
-          <div className="lg:col-span-2 bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-300">All Registration Codes</h2>
-              <button onClick={fetchCodes} className="text-xs text-blue-400 hover:text-blue-300">
+              <h2 className="text-sm font-semibold text-gray-900">All Registration Codes</h2>
+              <button onClick={fetchCodes} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
                 Refresh
               </button>
             </div>
@@ -271,20 +271,20 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-800">
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Code</th>
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Expires</th>
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Status</th>
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Used By</th>
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Code</th>
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Expires</th>
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Status</th>
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Used By</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {codes.map((c) => {
                       const status = codeStatus(c);
                       return (
-                        <tr key={c.id}>
-                          <td className="py-2.5 font-mono font-semibold text-white">{c.code}</td>
-                          <td className="py-2.5 text-gray-400 text-xs">
+                        <tr key={c.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="py-2.5 font-mono font-semibold text-gray-900">{c.code}</td>
+                          <td className="py-2.5 text-gray-600 text-xs">
                             {fmtDateTime(c.expiresAt)}
                           </td>
                           <td className="py-2.5">
@@ -292,7 +292,7 @@ export default function AdminDashboard() {
                               {status.label}
                             </span>
                           </td>
-                          <td className="py-2.5 text-gray-400 text-xs">
+                          <td className="py-2.5 text-gray-600 text-xs">
                             {c.usedBy ? (
                               <span>
                                 {c.usedBy.name}
@@ -316,49 +316,49 @@ export default function AdminDashboard() {
         {/* Create Lecturer + Lecturers Table */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Create Lecturer Form */}
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
-            <h2 className="text-sm font-semibold text-gray-300 mb-4">Create Lecturer Account</h2>
+          <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+            <h2 className="text-sm font-semibold text-gray-900 mb-4">Create Lecturer Account</h2>
             <form onSubmit={handleCreateLecturer} className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Full Name</label>
+                <label className="block text-xs text-gray-600 mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   value={createForm.name}
                   onChange={(e) => setCreateForm((f) => ({ ...f, name: e.target.value }))}
                   placeholder="e.g. Dr. Okonkwo Emmanuel"
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Email Address</label>
+                <label className="block text-xs text-gray-600 mb-1">Email Address</label>
                 <input
                   type="email"
                   required
                   value={createForm.email}
                   onChange={(e) => setCreateForm((f) => ({ ...f, email: e.target.value }))}
                   placeholder="lecturer@pogil.edu.ng"
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Password</label>
+                <label className="block text-xs text-gray-600 mb-1">Password</label>
                 <input
                   type="password"
                   required
                   value={createForm.password}
                   onChange={(e) => setCreateForm((f) => ({ ...f, password: e.target.value }))}
                   placeholder="Minimum 6 characters"
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Security Question</label>
+                <label className="block text-xs text-gray-600 mb-1">Security Question</label>
                 <select
                   required
                   value={createForm.securityQuestion}
                   onChange={(e) => setCreateForm((f) => ({ ...f, securityQuestion: e.target.value }))}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {SECURITY_QUESTIONS.map((q) => (
                     <option key={q} value={q}>{q}</option>
@@ -366,24 +366,24 @@ export default function AdminDashboard() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Security Answer</label>
+                <label className="block text-xs text-gray-600 mb-1">Security Answer</label>
                 <input
                   type="text"
                   required
                   value={createForm.securityAnswer}
                   onChange={(e) => setCreateForm((f) => ({ ...f, securityAnswer: e.target.value }))}
                   placeholder="Answer to the question above"
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               {createError && (
-                <p className="text-xs text-red-400 bg-red-950/50 border border-red-800 rounded-lg px-3 py-2">
+                <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                   {createError}
                 </p>
               )}
               {createSuccess && (
-                <p className="text-xs text-green-400 bg-green-950/50 border border-green-800 rounded-lg px-3 py-2">
+                <p className="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
                   {createSuccess}
                 </p>
               )}
@@ -399,10 +399,10 @@ export default function AdminDashboard() {
           </div>
 
           {/* Lecturers Table */}
-          <div className="lg:col-span-2 bg-gray-900 rounded-xl border border-gray-800 p-5">
+          <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-300">Lecturers</h2>
-              <button onClick={fetchUsers} className="text-xs text-blue-400 hover:text-blue-300">
+              <h2 className="text-sm font-semibold text-gray-900">Lecturers</h2>
+              <button onClick={fetchUsers} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
                 Refresh
               </button>
             </div>
@@ -414,24 +414,24 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-800">
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Name</th>
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Email</th>
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500">Date Created</th>
-                      <th className="text-left pb-2 text-xs font-medium text-gray-500"></th>
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Name</th>
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Email</th>
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600">Date Created</th>
+                      <th className="text-left pb-2 text-xs font-medium text-gray-600"></th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-800">
+                  <tbody className="divide-y divide-gray-200">
                     {lecturers.map((l) => (
-                      <tr key={l.id}>
-                        <td className="py-2.5 text-white text-sm">{l.name}</td>
-                        <td className="py-2.5 text-gray-400 text-xs">{l.email ?? "—"}</td>
-                        <td className="py-2.5 text-gray-400 text-xs">{fmtDate(l.createdAt)}</td>
+                      <tr key={l.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="py-2.5 text-gray-900 text-sm">{l.name}</td>
+                        <td className="py-2.5 text-gray-600 text-xs">{l.email ?? "—"}</td>
+                        <td className="py-2.5 text-gray-600 text-xs">{fmtDate(l.createdAt)}</td>
                         <td className="py-2.5">
                           <button
                             onClick={() => handleDeleteUser({ id: l.id, name: l.name, role: "lecturer" })}
                             disabled={deletingId === l.id || l.id === adminId}
-                            className="text-xs text-red-400 hover:text-red-300 border border-red-800 hover:border-red-600 rounded px-2 py-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            className="text-xs text-red-600 hover:text-red-700 border border-red-300 hover:border-red-400 rounded px-2 py-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                           >
                             {deletingId === l.id ? "Deleting…" : "Delete"}
                           </button>
@@ -446,9 +446,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Students Table */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-gray-300">Students</h2>
+            <h2 className="text-sm font-semibold text-gray-900">Students</h2>
             <span className="text-xs text-gray-600">{students.length} registered</span>
           </div>
           {usersLoading ? (
@@ -459,28 +459,28 @@ export default function AdminDashboard() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-800">
-                    <th className="text-left pb-2 text-xs font-medium text-gray-500">Name</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-500">Matric Number</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-500">Academic Session</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-500">Date Created</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-500"></th>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left pb-2 text-xs font-medium text-gray-600">Name</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-600">Matric Number</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-600">Academic Session</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-600">Date Created</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-600"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-y divide-gray-200">
                   {students.map((s) => (
-                    <tr key={s.id}>
-                      <td className="py-2.5 text-white text-sm">{s.name}</td>
-                      <td className="py-2.5 font-mono text-gray-400 text-xs">{s.matricNo ?? "—"}</td>
-                      <td className="py-2.5 text-gray-400 text-xs">
+                    <tr key={s.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="py-2.5 text-gray-900 text-sm">{s.name}</td>
+                      <td className="py-2.5 font-mono text-gray-600 text-xs">{s.matricNo ?? "—"}</td>
+                      <td className="py-2.5 text-gray-600 text-xs">
                         {s.academicSession ? formatAcademicSession(s.academicSession) : "—"}
                       </td>
-                      <td className="py-2.5 text-gray-400 text-xs">{fmtDate(s.createdAt)}</td>
+                      <td className="py-2.5 text-gray-600 text-xs">{fmtDate(s.createdAt)}</td>
                       <td className="py-2.5">
                         <button
                           onClick={() => handleDeleteUser({ id: s.id, name: s.name, role: "student" })}
                           disabled={deletingId === s.id}
-                          className="text-xs text-red-400 hover:text-red-300 border border-red-800 hover:border-red-600 rounded px-2 py-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                          className="text-xs text-red-600 hover:text-red-700 border border-red-300 hover:border-red-400 rounded px-2 py-1 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                         >
                           {deletingId === s.id ? "Deleting…" : "Delete"}
                         </button>
