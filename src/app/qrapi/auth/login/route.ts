@@ -10,7 +10,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
     }
 
-    const { role, identifier, password } = await request.json();
+    // Safely parse request body
+    let body;
+    try {
+      body = await request.json();
+    } catch (err) {
+      return NextResponse.json({ error: "Invalid or empty request body" }, { status: 400 });
+    }
+
+    // Extract and validate fields
+    const { role, identifier, password } = body;
 
     if (!role || !identifier || !password) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
