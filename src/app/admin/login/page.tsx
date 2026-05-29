@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 px-4">
       <div className="bg-white rounded-2xl border border-gray-200 p-8 w-full max-w-sm shadow-lg">
         <div className="mb-6 flex items-center gap-3">
-          <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border-2 border-gray-200" />
+          <img src="/logo.jpg" alt="POGIL College of Health Technology" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border-2 border-gray-200" />
           <div>
             <p className="text-xs text-gray-600 uppercase tracking-widest">System Access</p>
             <h1 className="text-xl font-semibold text-gray-900 mt-1">Administration</h1>

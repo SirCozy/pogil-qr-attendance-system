@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen flex flex-col bg-white">
       <header className="bg-blue-700 text-white py-4 px-6 shadow-md">
         <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover flex-shrink-0 border-2 border-blue-400" />
+          <img src="/logo.jpg" alt="POGIL College of Health Technology" className="h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover flex-shrink-0 border-2 border-blue-400" />
           <div>
             <p className="text-xs font-medium uppercase tracking-widest text-blue-200">
               POGIL College of Health Technology

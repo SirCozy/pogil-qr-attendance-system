@@ -5,8 +5,15 @@ import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, matricNo, password, code, securityQuestion, securityAnswer } =
-      await request.json();
+    // Safely parse request body
+    let body;
+    try {
+      body = await request.json();
+    } catch (err) {
+      return NextResponse.json({ error: "Invalid or empty request body" }, { status: 400 });
+    }
+
+    const { name, matricNo, password, code, securityQuestion, securityAnswer } = body;
 
     if (!name || !matricNo || !password || !code || !securityQuestion || !securityAnswer) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });

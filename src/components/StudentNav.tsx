@@ -31,7 +31,7 @@ export default function StudentNav() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <img
-                src="/pogil-logo.jpg"
+                src="/logo.jpg"
                 alt="POGIL College of Health Technology"
                 className="h-12 w-12 rounded-full object-cover flex-shrink-0 border-3 border-blue-300 shadow-md"
               />
@@ -76,7 +76,7 @@ export default function StudentNav() {
         <div className="px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-              src="/pogil-logo.jpg"
+              src="/logo.jpg"
               alt="POGIL"
               className="h-10 w-10 rounded-full object-cover border-2 border-blue-300 shadow-md"
             />

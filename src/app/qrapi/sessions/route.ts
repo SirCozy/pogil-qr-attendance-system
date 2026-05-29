@@ -24,7 +24,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { course } = await request.json();
+  // Safely parse request body
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return NextResponse.json({ error: "Invalid or empty request body" }, { status: 400 });
+  }
+
+  const { course } = body;
   if (!course?.trim()) {
     return NextResponse.json({ error: "Course name is required" }, { status: 400 });
   }

@@ -4,7 +4,15 @@ import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
-    const { step, role, identifier, answer, newPassword } = await request.json();
+    // Safely parse request body
+    let body;
+    try {
+      body = await request.json();
+    } catch (err) {
+      return NextResponse.json({ error: "Invalid or empty request body" }, { status: 400 });
+    }
+
+    const { step, role, identifier, answer, newPassword } = body;
 
     if (!role || !identifier) {
       return NextResponse.json({ error: "Role and identifier are required" }, { status: 400 });

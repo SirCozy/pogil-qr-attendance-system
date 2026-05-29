@@ -183,7 +183,7 @@ export default function AdminDashboard() {
       <header className="bg-gradient-to-r from-blue-700 to-blue-800 text-white border-b border-blue-900">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/pogil-logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-white" />
+            <img src="/logo.jpg" alt="POGIL College of Health Technology" className="h-10 w-10 rounded-full object-cover flex-shrink-0 border-2 border-white" />
             <div>
               <p className="text-xs text-blue-100 uppercase tracking-widest">System Administration</p>
               <h1 className="text-base font-semibold text-white mt-0.5">

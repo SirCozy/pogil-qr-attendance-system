@@ -29,7 +29,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { expiryHours } = await request.json();
+  // Safely parse request body
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return NextResponse.json({ error: "Invalid or empty request body" }, { status: 400 });
+  }
+
+  const { expiryHours } = body;
   const hours = Number(expiryHours) || 24;
 
   const expiresAt = new Date();
