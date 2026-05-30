@@ -30,7 +30,7 @@ A web-based QR code attendance management system built for **ND II Computer Scie
 |---|---|
 | Framework | Next.js 15 (App Router), React 19, TypeScript |
 | Styling | Tailwind CSS v4 |
-| Database | Prisma ORM + SQLite |
+| Database | Prisma ORM + Supabase PostgreSQL |
 | Authentication | iron-session v8 (encrypted cookie sessions) |
 | Password hashing | bcryptjs |
 | QR display | react-qr-code |
@@ -77,15 +77,26 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
 
 ## Environment Variables
 
-Create `artifacts/qr-attendance/.env.local` with the following:
+Create `.env.local` with the following:
 
 ```env
-# Required — must be a long, random secret string (min. 32 characters)
-# Used by iron-session to encrypt session cookies
+# Supabase runtime pooler URL for Prisma client
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@aws-0-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+
+# Supabase direct URL for Prisma CLI/engine operations
+DIRECT_URL="postgresql://postgres:YOUR_PASSWORD@aws-0-eu-west-1.supabase.co:5432/postgres"
+
+# Required — session secret for iron-session
 SESSION_SECRET=your_super_secret_key_here_change_this_in_production
 ```
 
-See `.env.example` for a template.
+On Vercel, set the same values under Environment Variables:
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `SESSION_SECRET`
+
+Use `Production` values for the deployment environment.
 
 > **Important:** Never commit `.env.local` or any file containing real secrets to version control.
 
@@ -93,7 +104,7 @@ See `.env.example` for a template.
 
 ## Database Setup
 
-The app uses **SQLite** via Prisma. The database file is stored at `artifacts/qr-attendance/prisma/dev.db`.
+The app uses **Supabase PostgreSQL** via Prisma.
 
 ```bash
 # Apply schema (creates or updates the SQLite database)
