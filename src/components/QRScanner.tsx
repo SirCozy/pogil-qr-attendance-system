@@ -60,6 +60,11 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
           return [] as Array<{ id: string; label?: string }>;
         });
 
+        console.info("[QRScanner] available cameras", {
+          cameraCount: cameras.length,
+          cameras,
+        });
+
         const onDecode = (decoded: string) => {
           if (!scannedRef.current) {
             scannedRef.current = true;
@@ -102,6 +107,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
               (errMsg: string) => onRuntimeError(errMsg)
             );
 
+            console.info("[QRScanner] camera start succeeded", { preferred });
             scannerRef.current = makeWrapperForHtml5QrCode(html5QrCode);
           } catch (startErr: unknown) {
             // Log exact error shape for production debugging
@@ -142,7 +148,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
                 true
               );
               scanner.render(onDecode, (m: string, e: unknown) => onRuntimeError(m, e));
-              scannerRef.current = { clear: () => scanner.clear() } as any;
+              scannerRef.current = { clear: async () => scanner.clear() } as any;
             }
           }
         } else {
@@ -153,7 +159,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
             true
           );
           scanner.render(onDecode, (m: string, e: unknown) => onRuntimeError(m, e));
-          scannerRef.current = { clear: () => scanner.clear() } as any;
+          scannerRef.current = { clear: async () => scanner.clear() } as any;
         }
 
         setLoading(false);
@@ -168,11 +174,14 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
 
         console.error("[QRScanner] initialization failed", {
           error: err,
-          message: errorMsg,
+          name: (err as any)?.name,
+          message: (err as any)?.message,
+          stack: (err as any)?.stack,
           hostname: window.location.hostname,
           protocol: window.location.protocol,
           isSecureContext,
           hasGetUserMedia: Boolean(navigator.mediaDevices?.getUserMedia),
+          userAgent: navigator.userAgent,
         });
 
         setError(errorMsg);
@@ -197,9 +206,14 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       const errorMsg = err instanceof Error ? err.message : "Failed to initialize scanner";
       console.error("[QRScanner] initialization promise rejected", {
         error: err,
-        message: errorMsg,
+        name: (err as any)?.name,
+        message: (err as any)?.message,
+        stack: (err as any)?.stack,
         hostname: window.location.hostname,
         protocol: window.location.protocol,
+        isSecureContext,
+        hasGetUserMedia: Boolean(navigator.mediaDevices?.getUserMedia),
+        userAgent: navigator.userAgent,
       });
       setError(errorMsg);
       setLoading(false);
@@ -214,16 +228,6 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
 
   return (
     <div className="space-y-4">
-      {/* Loading State */}
-      {loading && (
-        <div className="w-full aspect-square bg-gray-100 rounded-xl flex items-center justify-center animate-pulse">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-            <p className="text-sm text-gray-600 font-medium">Initializing camera...</p>
-          </div>
-        </div>
-      )}
-
       {/* Error State */}
       {error && !loading && (
         <div className="w-full bg-red-50 border-2 border-red-300 rounded-xl p-6 text-center">
@@ -244,31 +248,42 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       )}
 
       {/* Scanner Container */}
-      {!loading && !error && (
+      {!error && (
         <div className="relative">
-          <div id="qr-scanner-container" className="w-full rounded-xl overflow-hidden border-2 border-blue-200" />
-          
-          {/* Scanning Helper Overlay */}
-          <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Corner indicators */}
-              <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-blue-500" />
-              <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-blue-500" />
-              <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-blue-500" />
-              <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-blue-500" />
+          <div id="qr-scanner-container" className="w-full rounded-xl overflow-hidden border-2 border-blue-200 min-h-[320px]" />
 
-              {/* Scanning pulse indicator */}
-              <div className="animate-pulse">
-                <div className="w-16 h-16 border-2 border-blue-500 rounded-lg opacity-70" />
+          {loading ? (
+            <div className="absolute inset-0 bg-white/90 flex items-center justify-center rounded-xl">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+                <p className="text-sm text-gray-600 font-medium">Initializing camera...</p>
               </div>
             </div>
-          </div>
+          ) : (
+            <>
+              {/* Scanning Helper Overlay */}
+              <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {/* Corner indicators */}
+                  <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-blue-500" />
+                  <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-blue-500" />
+                  <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-blue-500" />
+                  <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-blue-500" />
 
-          {/* Helper text */}
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600 font-medium">Position QR code inside the frame</p>
-            <p className="text-xs text-gray-500 mt-1">Keep steady and well-lit for best results</p>
-          </div>
+                  {/* Scanning pulse indicator */}
+                  <div className="animate-pulse">
+                    <div className="w-16 h-16 border-2 border-blue-500 rounded-lg opacity-70" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Helper text */}
+              <div className="mt-4 text-center">
+                <p className="text-sm text-gray-600 font-medium">Position QR code inside the frame</p>
+                <p className="text-xs text-gray-500 mt-1">Keep steady and well-lit for best results</p>
+              </div>
+            </>
+          )}
         </div>
       )}
 
